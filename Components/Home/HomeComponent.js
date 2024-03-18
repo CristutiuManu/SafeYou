@@ -1,13 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
+  const navigation = useNavigation();
+
   return (
     <ImageBackground source={require('../../assets/background.jpeg')} style={styles.container}>
-      <View style={styles.container}>
-        <Text style={styles.title}></Text>
-        {/* <Button title="Emergency Alert" onPress={() => alert('Emergency Alert Sent!')} color="#841584" /> */}
-        <Button title="Contact Authorities" onPress={() => alert('Authorities have been contacted!')} color="#841584" />
+      <View style={styles.content}>
+        <Text style={styles.title}>Welcome to SafeYOU</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('EventList')} style={styles.button}>
+          <Text style={styles.buttonText}>View Events</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>Powered by University Of Trento</Text>
@@ -20,25 +24,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5'
   },
   content: {
-    flex: 1,
+    flex: 0.3, // Adjusted flex value
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 20,
+    borderRadius: 10,
+    marginVertical: '30%' // Added vertical margins
   },
   title: {
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#fff'
+    color: '#333',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10
   },
-  subtitle: {
-    fontSize: 25,
-    marginBottom: 50,
-    color: '#FFD700'
+  button: {
+    backgroundColor: '#841584',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: '100%'
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    textAlign: 'center'
   },
   footer: {
+    position: 'absolute', // Added position absolute
+    bottom: 0, // Ensure footer is at the bottom
     width: '100%',
     height: 50,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -46,6 +69,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   footerText: {
-    color: '#fff'
+    color: '#fff',
+    fontSize: 18
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover'
   }
 });

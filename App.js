@@ -1,15 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { useEffect, useState } from 'react';
-import Home from './Components/Home/HomeComponent';
-import PredictHQEvents from './Components/API/PredictHQEvents';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { createStackNavigator } from '@react-navigation/stack';
 import EventList from './Components/EventList/EventList';
+import Home from './Components/Home/HomeComponent';
 
 export default function App() {
+  const Stack = createStackNavigator();
+
   return (
-    <View style={styles.container}>
-      <EventList />
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={Home} options={{ title: 'Welcome' }} />
+          <Stack.Screen name="EventList" component={EventList} options={{ title: 'Events' }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
