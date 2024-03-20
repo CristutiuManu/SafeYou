@@ -3,9 +3,9 @@ import { ScrollView, View, Text, StyleSheet, ActivityIndicator, TouchableOpacity
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import axios from 'axios';
 import moment from 'moment';
-import { Location } from 'expo-location';
 
-import { Card,Dialog } from '@rneui/themed';
+
+import { Card,Dialog,Chip } from '@rneui/themed';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -44,29 +44,10 @@ const EventList = () => {
         setLoading(false);
       });
 
-    // Ottieni la posizione attuale quando il componente viene montato
-    getCurrentLocation();
+
   }, []);
 
-  const getCurrentLocation = () => {
 
-  };
-
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Raggio della Terra in chilometri
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-              Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const d = R * c; // Distanza in chilometri
-    return d;
-  };
-
-  const deg2rad = (deg) => {
-    return deg * (Math.PI/180)
-  };
 
   const filterEventsByTitle = () => {
     const filteredEvents = events.filter(event => event.title.toLowerCase().includes(searchText.toLowerCase()));
@@ -77,18 +58,7 @@ const EventList = () => {
       return dateA - dateB;
     });
 
-    // Calcola la distanza per ciascun evento
-    const eventsWithDistance = sortedEvents.map(event => {
-      const distance = calculateDistance(
-        currentPosition.latitude, // Utilizza la latitudine della posizione attuale
-        currentPosition.longitude, // Utilizza la longitudine della posizione attuale
-        event.location.lat, // Latitudine dell'evento
-        event.location.lon  // Longitudine dell'evento
-      );
-      return { ...event, distance };
-    });
-
-    return eventsWithDistance;
+    return sortedEvents;
   };
 
   if (loading) {
@@ -122,6 +92,7 @@ const EventList = () => {
                       <Text style={styles.eventDetail}>End Date: {formatDateTime(event.end)}</Text>
                       <Text style={styles.eventDetail}>Location: {event.location}</Text>
                       <Text style={styles.eventStatus}>{isActive ? 'Event is Active' : `Time Until Start: ${timeRemaining}`}</Text>
+                      <Chip title="PUBLIC ALERT" containerStyle={{ marginVertical: 15 }} />
                     </Card>
                   </TouchableOpacity>
         );
