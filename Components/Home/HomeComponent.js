@@ -12,6 +12,12 @@ export default function Home() {
         <TouchableOpacity onPress={() => navigation.navigate('EventList')} style={styles.button}>
           <Text style={styles.buttonText}>View Events</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.button}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SignIn')} style={styles.button}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>Powered by University Of Trento</Text>
@@ -29,13 +35,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5'
   },
   content: {
-    flex: 0.3, // Adjusted flex value
+    flex: 0.6, // Adjusted flex value
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     padding: 20,
     borderRadius: 10,
-    marginVertical: '30%' // Added vertical margins
+    marginVertical: '20%' // Increased vertical margins
   },
   title: {
     fontSize: 40,

@@ -5,6 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import EventList from './Components/EventList/EventList';
 import Home from './Components/Home/HomeComponent';
+import SignUp from './Components/Auth/SignUp';
+import SignIn from './Components/Auth/SignIn';
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -15,6 +17,8 @@ export default function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ title: 'Welcome' }} />
           <Stack.Screen name="EventList" component={EventList} options={{ title: 'Events' }} />
+          <Stack.Screen name="SignUp" component={SignUp} options={{ title: 'Sign Up' }} />
+          <Stack.Screen name="SignIn" component={SignIn} options={{ title: 'Sign In' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
