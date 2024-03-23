@@ -7,7 +7,7 @@ import EventList from './Components/EventList/EventList';
 import Home from './Components/Home/HomeComponent';
 import SignUp from './Components/Auth/SignUp';
 import SignIn from './Components/Auth/SignIn';
-
+import EventDetailScreen from './Components/EventList/EventDetailScreen';
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -19,6 +19,7 @@ export default function App() {
           <Stack.Screen name="EventList" component={EventList} options={{ title: 'Events' }} />
           <Stack.Screen name="SignUp" component={SignUp} options={{ title: 'Sign Up' }} />
           <Stack.Screen name="SignIn" component={SignIn} options={{ title: 'Sign In' }} />
+          <Stack.Screen name="EventDetail" component={EventDetailScreen} options={{ title: 'Event Detail' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
