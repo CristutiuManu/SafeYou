@@ -3,17 +3,16 @@ import { ScrollView, View, Text, StyleSheet, ActivityIndicator, TouchableOpacity
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import axios from 'axios';
 import moment from 'moment';
-
-import { Card, Dialog, Chip } from '@rneui/themed';
+import { Card, Chip } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/native';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const [currentPosition, setCurrentPosition] = useState({ latitude: null, longitude: null }); // Variabile per memorizzare la posizione attuale
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [isDialogVisible, setIsDialogVisible] = useState(false);
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
 
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
@@ -56,14 +55,6 @@ const EventList = () => {
     return sortedEvents;
   };
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
   return (
     <ScrollView style={{ ...styles.container, paddingTop: insets.top }}>
       <View style={styles.searchPanel}>
@@ -74,46 +65,42 @@ const EventList = () => {
           value={searchText}
         />
       </View>
-      {filterEventsByTitle().map((event) => {
-        const isActive = moment().isBetween(moment(event.start), moment(event.end));
-        const timeRemaining = moment(event.start).fromNow();
-        return (
-          <TouchableOpacity
-            key={event.id}
-            style={styles.eventCard}
-            onPress={() => {
-              setSelectedEvent(event);
-              setIsDialogVisible(true);
-            }}
-          >
-            <Card containerStyle={styles.cardContainer}>
-              <Card.Title>
-                <Text style={styles.eventTitle}>{event.title}</Text>
-              </Card.Title>
-              <Card.Divider />
-              <Text style={styles.eventDetail}>{event.country}</Text>
-              <Text style={styles.eventDetail}>Start Date: {formatDateTime(event.start)}</Text>
-              <Text style={styles.eventDetail}>End Date: {formatDateTime(event.end)}</Text>
-              <Text style={styles.eventDetail}>Location: {event.location}</Text>
-              <Text style={styles.eventStatus}>
-                {isActive ? 'Event is Active' : `Time Until Start: ${timeRemaining}`}
-              </Text>
-              <Chip title="PUBLIC ALERT" containerStyle={{ marginVertical: 15 }} />
-            </Card>
-          </TouchableOpacity>
-        );
-      })}
-      <Dialog visible={isDialogVisible} onDismiss={() => setIsDialogVisible(false)}>
-        {selectedEvent && (
-          <View>
-            <Text style={styles.dialogTitle}>{selectedEvent.title}</Text>
-            <Text style={styles.dialogDetail}>Country: {selectedEvent.country}</Text>
-            <Text style={styles.dialogDetail}>Start Date: {formatDateTime(selectedEvent.start)}</Text>
-            <Text style={styles.dialogDetail}>End Date: {formatDateTime(selectedEvent.end)}</Text>
-            <Text style={styles.dialogDetail}>Location: {selectedEvent.location}</Text>
-          </View>
-        )}
-      </Dialog>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        filterEventsByTitle().map((event) => {
+          const isActive = moment().isBetween(moment(event.start), moment(event.end));
+          const timeRemaining = moment(event.start).fromNow();
+          return (
+            <TouchableOpacity
+              key={event.id}
+              style={styles.eventCard}
+              onPress={() => {
+                setSelectedEvent(event);
+                navigation.navigate('EventDetail', { selectedEvent: event });
+              }}
+            >
+              <Card containerStyle={styles.cardContainer}>
+                <Card.Title>
+                  <Text style={styles.eventTitle}>{event.title}</Text>
+                </Card.Title>
+                <Card.Divider />
+                <Text style={styles.eventDetail}>{event.country}</Text>
+                <Text style={styles.eventDetail}>Start Date: {formatDateTime(event.start)}</Text>
+                <Text style={styles.eventDetail}>End Date: {formatDateTime(event.end)}</Text>
+                <Text style={styles.eventDetail}>Location: {event.location}</Text>
+                <Text style={styles.eventStatus}>
+                  {isActive ? 'Event is Active' : `Time Until Start: ${timeRemaining}`}
+                </Text>
+                <Chip title="PUBLIC ALERT" containerStyle={{ marginVertical: 15 }} />
+                <Chip title={event.category} containerStyle={{ marginVertical: 15 }} />
+              </Card>
+            </TouchableOpacity>
+          );
+        })
+      )}
     </ScrollView>
   );
 };
@@ -168,17 +155,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 5
-  },
-  dialogTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10
-  },
-  dialogDetail: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: 'center'
   }
 });
 
