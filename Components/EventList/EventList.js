@@ -4,8 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import axios from 'axios';
 import moment from 'moment';
 
-
-import { Card,Dialog,Chip } from '@rneui/themed';
+import { Card, Dialog, Chip } from '@rneui/themed';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -43,14 +42,10 @@ const EventList = () => {
         console.error('Error fetching events:', error);
         setLoading(false);
       });
-
-
   }, []);
 
-
-
   const filterEventsByTitle = () => {
-    const filteredEvents = events.filter(event => event.title.toLowerCase().includes(searchText.toLowerCase()));
+    const filteredEvents = events.filter((event) => event.title.toLowerCase().includes(searchText.toLowerCase()));
 
     const sortedEvents = filteredEvents.sort((a, b) => {
       const dateA = moment(a.start);
@@ -83,42 +78,52 @@ const EventList = () => {
         const isActive = moment().isBetween(moment(event.start), moment(event.end));
         const timeRemaining = moment(event.start).fromNow();
         return (
-          <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => { setSelectedEvent(event); setIsDialogVisible(true); }}>
-                    <Card containerStyle={styles.cardContainer}>
-                      <Card.Title><Text style={styles.eventTitle}>{event.title}</Text></Card.Title>
-                      <Card.Divider />
-                      <Text style={styles.eventDetail}>{event.country}</Text>
-                      <Text style={styles.eventDetail}>Start Date: {formatDateTime(event.start)}</Text>
-                      <Text style={styles.eventDetail}>End Date: {formatDateTime(event.end)}</Text>
-                      <Text style={styles.eventDetail}>Location: {event.location}</Text>
-                      <Text style={styles.eventStatus}>{isActive ? 'Event is Active' : `Time Until Start: ${timeRemaining}`}</Text>
-                      <Chip title="PUBLIC ALERT" containerStyle={{ marginVertical: 15 }} />
-                    </Card>
-                  </TouchableOpacity>
+          <TouchableOpacity
+            key={event.id}
+            style={styles.eventCard}
+            onPress={() => {
+              setSelectedEvent(event);
+              setIsDialogVisible(true);
+            }}
+          >
+            <Card containerStyle={styles.cardContainer}>
+              <Card.Title>
+                <Text style={styles.eventTitle}>{event.title}</Text>
+              </Card.Title>
+              <Card.Divider />
+              <Text style={styles.eventDetail}>{event.country}</Text>
+              <Text style={styles.eventDetail}>Start Date: {formatDateTime(event.start)}</Text>
+              <Text style={styles.eventDetail}>End Date: {formatDateTime(event.end)}</Text>
+              <Text style={styles.eventDetail}>Location: {event.location}</Text>
+              <Text style={styles.eventStatus}>
+                {isActive ? 'Event is Active' : `Time Until Start: ${timeRemaining}`}
+              </Text>
+              <Chip title="PUBLIC ALERT" containerStyle={{ marginVertical: 15 }} />
+            </Card>
+          </TouchableOpacity>
         );
       })}
       <Dialog visible={isDialogVisible} onDismiss={() => setIsDialogVisible(false)}>
-              {selectedEvent && (
-                <View>
-                  <Text style={styles.dialogTitle}>{selectedEvent.title}</Text>
-                  <Text style={styles.dialogDetail}>Country: {selectedEvent.country}</Text>
-                  <Text style={styles.dialogDetail}>Start Date: {formatDateTime(selectedEvent.start)}</Text>
-                  <Text style={styles.dialogDetail}>End Date: {formatDateTime(selectedEvent.end)}</Text>
-                  <Text style={styles.dialogDetail}>Location: {selectedEvent.location}</Text>
-
-                </View>
-              )}
-            </Dialog>
+        {selectedEvent && (
+          <View>
+            <Text style={styles.dialogTitle}>{selectedEvent.title}</Text>
+            <Text style={styles.dialogDetail}>Country: {selectedEvent.country}</Text>
+            <Text style={styles.dialogDetail}>Start Date: {formatDateTime(selectedEvent.start)}</Text>
+            <Text style={styles.dialogDetail}>End Date: {formatDateTime(selectedEvent.end)}</Text>
+            <Text style={styles.dialogDetail}>Location: {selectedEvent.location}</Text>
+          </View>
+        )}
+      </Dialog>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   eventCard: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   cardContainer: {
     backgroundColor: '#fff',
@@ -135,16 +140,16 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   eventDetail: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 10
   },
   eventStatus: {
     fontSize: 16,
     marginTop: 10,
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   loadingContainer: {
     flex: 1,
@@ -164,17 +169,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5
   },
-   dialogTitle: {
-       fontSize: 18,
-       fontWeight: 'bold',
-       textAlign: 'center',
-       marginBottom: 10,
-     },
-     dialogDetail: {
-       fontSize: 16,
-       marginBottom: 10,
-       textAlign: 'center',
-     },
+  dialogTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10
+  },
+  dialogDetail: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center'
+  }
 });
 
 export default EventList;
